@@ -1,4 +1,5 @@
 -- Migration 001: Base schema for Giro Ativo
+-- Idempotente: pode ser executada múltiplas vezes sem erros
 
 -- Companies (PJ profile)
 CREATE TABLE IF NOT EXISTS companies (
@@ -92,6 +93,7 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+DROP TRIGGER IF EXISTS update_products_updated_at ON products;
 CREATE TRIGGER update_products_updated_at
   BEFORE UPDATE ON products
   FOR EACH ROW
@@ -101,26 +103,36 @@ CREATE TRIGGER update_products_updated_at
 -- Row Level Security
 -- =====================
 
-ALTER TABLE companies ENABLE ROW LEVEL SECURITY;
-ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
-ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+ALTER TABLE companies     ENABLE ROW LEVEL SECURITY;
+ALTER TABLE categories    ENABLE ROW LEVEL SECURITY;
+ALTER TABLE products      ENABLE ROW LEVEL SECURITY;
 ALTER TABLE product_images ENABLE ROW LEVEL SECURITY;
-ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
-ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE conversations  ENABLE ROW LEVEL SECURITY;
+ALTER TABLE messages       ENABLE ROW LEVEL SECURITY;
 ALTER TABLE visit_requests ENABLE ROW LEVEL SECURITY;
 
 -- COMPANIES --
+DROP POLICY IF EXISTS "companies_select_public" ON companies;
+DROP POLICY IF EXISTS "companies_insert_own"    ON companies;
+DROP POLICY IF EXISTS "companies_update_own"    ON companies;
+
 CREATE POLICY "companies_select_public" ON companies FOR SELECT USING (true);
-CREATE POLICY "companies_insert_own" ON companies FOR INSERT WITH CHECK (auth.uid() = user_id);
-CREATE POLICY "companies_update_own" ON companies FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "companies_insert_own"    ON companies FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "companies_update_own"    ON companies FOR UPDATE USING (auth.uid() = user_id);
 
 -- CATEGORIES --
+DROP POLICY IF EXISTS "categories_select_public" ON categories;
 CREATE POLICY "categories_select_public" ON categories FOR SELECT USING (true);
 
 -- PRODUCTS --
-CREATE POLICY "products_select_public" ON products FOR SELECT USING (status = 'active' OR company_id IN (
-  SELECT id FROM companies WHERE user_id = auth.uid()
-));
+DROP POLICY IF EXISTS "products_select_public" ON products;
+DROP POLICY IF EXISTS "products_insert_own"    ON products;
+DROP POLICY IF EXISTS "products_update_own"    ON products;
+DROP POLICY IF EXISTS "products_delete_own"    ON products;
+
+CREATE POLICY "products_select_public" ON products FOR SELECT USING (
+  status = 'active' OR company_id IN (SELECT id FROM companies WHERE user_id = auth.uid())
+);
 CREATE POLICY "products_insert_own" ON products FOR INSERT WITH CHECK (
   company_id IN (SELECT id FROM companies WHERE user_id = auth.uid())
 );
@@ -132,6 +144,10 @@ CREATE POLICY "products_delete_own" ON products FOR DELETE USING (
 );
 
 -- PRODUCT IMAGES --
+DROP POLICY IF EXISTS "product_images_select_public" ON product_images;
+DROP POLICY IF EXISTS "product_images_insert_own"    ON product_images;
+DROP POLICY IF EXISTS "product_images_delete_own"    ON product_images;
+
 CREATE POLICY "product_images_select_public" ON product_images FOR SELECT USING (true);
 CREATE POLICY "product_images_insert_own" ON product_images FOR INSERT WITH CHECK (
   product_id IN (
@@ -149,8 +165,11 @@ CREATE POLICY "product_images_delete_own" ON product_images FOR DELETE USING (
 );
 
 -- CONVERSATIONS --
+DROP POLICY IF EXISTS "conversations_select_participant" ON conversations;
+DROP POLICY IF EXISTS "conversations_insert_buyer"       ON conversations;
+
 CREATE POLICY "conversations_select_participant" ON conversations FOR SELECT USING (
-  buyer_id IN (SELECT id FROM companies WHERE user_id = auth.uid()) OR
+  buyer_id  IN (SELECT id FROM companies WHERE user_id = auth.uid()) OR
   seller_id IN (SELECT id FROM companies WHERE user_id = auth.uid())
 );
 CREATE POLICY "conversations_insert_buyer" ON conversations FOR INSERT WITH CHECK (
@@ -158,10 +177,14 @@ CREATE POLICY "conversations_insert_buyer" ON conversations FOR INSERT WITH CHEC
 );
 
 -- MESSAGES --
+DROP POLICY IF EXISTS "messages_select_participant" ON messages;
+DROP POLICY IF EXISTS "messages_insert_participant" ON messages;
+DROP POLICY IF EXISTS "messages_update_own"         ON messages;
+
 CREATE POLICY "messages_select_participant" ON messages FOR SELECT USING (
   conversation_id IN (
     SELECT id FROM conversations
-    WHERE buyer_id IN (SELECT id FROM companies WHERE user_id = auth.uid())
+    WHERE buyer_id  IN (SELECT id FROM companies WHERE user_id = auth.uid())
        OR seller_id IN (SELECT id FROM companies WHERE user_id = auth.uid())
   )
 );
@@ -169,7 +192,7 @@ CREATE POLICY "messages_insert_participant" ON messages FOR INSERT WITH CHECK (
   sender_id IN (SELECT id FROM companies WHERE user_id = auth.uid()) AND
   conversation_id IN (
     SELECT id FROM conversations
-    WHERE buyer_id IN (SELECT id FROM companies WHERE user_id = auth.uid())
+    WHERE buyer_id  IN (SELECT id FROM companies WHERE user_id = auth.uid())
        OR seller_id IN (SELECT id FROM companies WHERE user_id = auth.uid())
   )
 );
@@ -178,8 +201,13 @@ CREATE POLICY "messages_update_own" ON messages FOR UPDATE USING (
 );
 
 -- VISIT REQUESTS --
+DROP POLICY IF EXISTS "visits_select_participant" ON visit_requests;
+DROP POLICY IF EXISTS "visits_insert_buyer"        ON visit_requests;
+DROP POLICY IF EXISTS "visits_update_seller"       ON visit_requests;
+DROP POLICY IF EXISTS "visits_delete_buyer"        ON visit_requests;
+
 CREATE POLICY "visits_select_participant" ON visit_requests FOR SELECT USING (
-  buyer_id IN (SELECT id FROM companies WHERE user_id = auth.uid()) OR
+  buyer_id  IN (SELECT id FROM companies WHERE user_id = auth.uid()) OR
   seller_id IN (SELECT id FROM companies WHERE user_id = auth.uid())
 );
 CREATE POLICY "visits_insert_buyer" ON visit_requests FOR INSERT WITH CHECK (

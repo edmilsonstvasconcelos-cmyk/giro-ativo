@@ -40,7 +40,7 @@ export default function NovoProdutoPage() {
   const [error, setError] = useState<string | null>(null)
   const [form, setForm] = useState({
     title: '', description: '', category_id: '', price: '', unit: 'unidade',
-    quantity: '1', condition: 'usado', location: '',
+    quantity: '1', condicao: 'bom', location: '', norma_tecnica: '', ncm: '',
   })
 
   useEffect(() => {
@@ -99,8 +99,10 @@ export default function NovoProdutoPage() {
           price: form.price ? Number(form.price) : null,
           unit: form.unit,
           quantity: Number(form.quantity),
-          condition: form.condition as 'novo' | 'seminovo' | 'usado',
+          condicao: form.condicao as 'otimo' | 'bom' | 'regular' | 'inservivel',
           location: form.location || null,
+          norma_tecnica: form.norma_tecnica || null,
+          ncm: form.ncm || null,
         })
         .select('id')
         .single()
@@ -255,18 +257,19 @@ export default function NovoProdutoPage() {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="condition">Condição *</Label>
+                <Label htmlFor="condicao">Condição *</Label>
                 <select
-                  id="condition"
-                  name="condition"
-                  value={form.condition}
+                  id="condicao"
+                  name="condicao"
+                  value={form.condicao}
                   onChange={handleChange}
                   required
                   className="w-full h-9 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  <option value="novo">Novo</option>
-                  <option value="seminovo">Seminovo</option>
-                  <option value="usado">Usado</option>
+                  <option value="otimo">Ótimo — como novo, sem uso</option>
+                  <option value="bom">Bom — usado, funcionando perfeitamente</option>
+                  <option value="regular">Regular — funcionando, com desgaste</option>
+                  <option value="inservivel">Inservível — para peças ou sucata</option>
                 </select>
               </div>
             </div>
@@ -325,6 +328,36 @@ export default function NovoProdutoPage() {
                   name="location"
                   placeholder="Ex: São Paulo, SP"
                   value={form.location}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="norma_tecnica">
+                  Norma técnica
+                  <span className="text-muted-foreground font-normal ml-1 text-xs">(opcional)</span>
+                </Label>
+                <Input
+                  id="norma_tecnica"
+                  name="norma_tecnica"
+                  placeholder="Ex: ASTM A312, NBR 5462, DIN EN 10216"
+                  value={form.norma_tecnica}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="ncm">
+                  NCM
+                  <span className="text-muted-foreground font-normal ml-1 text-xs">(opcional)</span>
+                </Label>
+                <Input
+                  id="ncm"
+                  name="ncm"
+                  placeholder="Ex: 7304.41.10"
+                  value={form.ncm}
                   onChange={handleChange}
                 />
               </div>

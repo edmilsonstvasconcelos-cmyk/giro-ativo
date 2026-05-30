@@ -20,15 +20,16 @@ const categories = [
 ]
 
 const estados = [
-  '', 'AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG',
+  'AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG',
   'PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO',
 ]
 
-const conditions = [
-  { label: 'Todos', value: '' },
-  { label: 'Novo', value: 'novo' },
-  { label: 'Seminovo', value: 'seminovo' },
-  { label: 'Usado', value: 'usado' },
+const condicoes = [
+  { label: 'Todas', value: '' },
+  { label: 'Ótimo', value: 'otimo' },
+  { label: 'Bom', value: 'bom' },
+  { label: 'Regular', value: 'regular' },
+  { label: 'Inservível', value: 'inservivel' },
 ]
 
 export default function ProductFilters() {
@@ -106,11 +107,11 @@ export default function ProductFilters() {
         </div>
       </div>
 
-      {/* Condition */}
+      {/* Condição */}
       <div className="space-y-1.5">
         <Label className="text-xs text-muted-foreground">Condição</Label>
         <div className="flex flex-wrap gap-1.5">
-          {conditions.map(({ label, value }) => (
+          {condicoes.map(({ label, value }) => (
             <button
               key={value}
               onClick={() => handleFilter('condicao', value)}
@@ -135,7 +136,7 @@ export default function ProductFilters() {
           className="w-full h-8 rounded-md border border-input bg-background px-2 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         >
           <option value="">Todos os estados</option>
-          {estados.slice(1).map((uf) => (
+          {estados.map((uf) => (
             <option key={uf} value={uf}>{uf}</option>
           ))}
         </select>

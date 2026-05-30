@@ -1,17 +1,20 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Zap, Mail, ArrowRight, Eye, EyeOff } from 'lucide-react'
+import { Mail, ArrowRight, Eye, EyeOff, CheckCircle } from 'lucide-react'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
+  const cadastroOk = searchParams.get('cadastro') === 'ok'
+  const nextPath   = searchParams.get('next') ?? '/dashboard'
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -33,7 +36,7 @@ export default function LoginPage() {
     }
 
     router.refresh()
-    router.push('/dashboard')
+    router.push(nextPath)
   }
 
   async function handleGoogleLogin() {
@@ -67,6 +70,12 @@ export default function LoginPage() {
 
         {/* Card */}
         <div className="glass rounded-2xl p-8 shadow-2xl">
+          {cadastroOk && (
+            <div className="mb-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-sm flex items-start gap-2">
+              <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" />
+              <span>Conta criada com sucesso! Verifique seu e-mail e depois faça login.</span>
+            </div>
+          )}
           {error && (
             <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
               {error}
@@ -148,12 +157,23 @@ export default function LoginPage() {
             Entrar com Google
           </Button>
 
-          <p className="mt-6 text-center text-sm text-slate-400">
-            Não tem conta?{' '}
-            <Link href="/cadastro" className="text-teal-400 hover:text-teal-300 font-medium transition-colors">
-              Cadastre sua empresa
-            </Link>
-          </p>
+          <div className="mt-6 pt-5 border-t border-white/10 space-y-2">
+            <p className="text-center text-xs text-slate-500 mb-3">Ainda não tem conta?</p>
+            <div className="grid grid-cols-2 gap-2">
+              <Link href="/cadastro/comprador">
+                <div className="flex flex-col items-center gap-1 p-3 rounded-xl border border-white/10 bg-white/5 hover:border-teal-500/40 hover:bg-white/10 transition-all cursor-pointer">
+                  <span className="text-lg">🛒</span>
+                  <span className="text-xs font-semibold text-slate-300">Sou Comprador</span>
+                </div>
+              </Link>
+              <Link href="/cadastro/vendedor">
+                <div className="flex flex-col items-center gap-1 p-3 rounded-xl border border-white/10 bg-white/5 hover:border-teal-500/40 hover:bg-white/10 transition-all cursor-pointer">
+                  <span className="text-lg">🏭</span>
+                  <span className="text-xs font-semibold text-slate-300">Sou Vendedor</span>
+                </div>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -6,17 +6,7 @@ import ContactSellerButton from '@/components/produtos/ContactSellerButton'
 import VisitRequestButton from '@/components/visitas/VisitRequestButton'
 import { MapPin, Package, Eye, Building2, Calendar, Tag } from 'lucide-react'
 
-const conditionLabel: Record<string, string> = {
-  novo: 'Novo',
-  seminovo: 'Seminovo',
-  usado: 'Usado',
-}
-
-const conditionColor: Record<string, string> = {
-  novo: 'bg-green-500/10 text-green-600 border-green-500/20',
-  seminovo: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
-  usado: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
-}
+import { condicaoLabel, condicaoBadgeColor } from '@/lib/utils/produto'
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -93,8 +83,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                   <Tag className="w-3 h-3 inline mr-1" />{category.nome}
                 </span>
               )}
-              <span className={`px-2.5 py-1 rounded-lg text-xs font-medium border ${conditionColor[product.condition] ?? conditionColor.usado}`}>
-                {conditionLabel[product.condition] ?? product.condition}
+              <span className={`px-2.5 py-1 rounded-lg text-xs font-medium border ${condicaoBadgeColor[product.condicao as keyof typeof condicaoBadgeColor] ?? condicaoBadgeColor.bom}`}>
+                {condicaoLabel[product.condicao as keyof typeof condicaoLabel] ?? product.condicao}
               </span>
             </div>
 

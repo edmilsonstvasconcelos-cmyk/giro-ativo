@@ -7,10 +7,25 @@ import { Button } from '@/components/ui/button'
 
 export const metadata = { title: 'Dashboard' }
 
+const ROLE_HOME: Record<string, string> = {
+  vendedor:  '/vendedor',
+  comprador: '/comprador',
+  avaliador: '/avaliador',
+  moderador: '/admin/moderacao',
+  admin:     '/admin',
+}
+
 export default async function DashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
+
+  // Redireciona para a home correta do role — /dashboard é compatibilidade retroativa
+  const { data: profile } = await supabase
+    .from('profiles').select('role').eq('user_id', user.id).single()
+  if (profile?.role && ROLE_HOME[profile.role]) {
+    redirect(ROLE_HOME[profile.role])
+  }
 
   const { data: company } = await supabase
     .from('companies')

@@ -1,13 +1,14 @@
 import Link from 'next/link'
-import { Badge } from '@/components/ui/badge'
 import { MapPin, Package, Eye } from 'lucide-react'
+import { condicaoLabel, condicaoBadgeColor } from '@/lib/utils/produto'
+import type { CondicaoProduto } from '@/types/supabase'
 
 interface ProductCardProps {
   id: string
   title: string
   price: number | null
   unit: string
-  condition: string
+  condicao: CondicaoProduto
   location: string | null
   category: string | null
   views: number
@@ -15,20 +16,8 @@ interface ProductCardProps {
   companyName: string
 }
 
-const conditionLabel: Record<string, string> = {
-  novo: 'Novo',
-  seminovo: 'Seminovo',
-  usado: 'Usado',
-}
-
-const conditionColor: Record<string, string> = {
-  novo: 'bg-green-500/10 text-green-600 border-green-500/20',
-  seminovo: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
-  usado: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
-}
-
 export default function ProductCard({
-  id, title, price, unit, condition, location, category, views, cover, companyName
+  id, title, price, unit, condicao, location, category, views, cover, companyName
 }: ProductCardProps) {
   return (
     <Link href={`/produtos/${id}`} className="group">
@@ -47,8 +36,8 @@ export default function ProductCard({
             </div>
           )}
           <div className="absolute top-2 left-2">
-            <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium border ${conditionColor[condition] ?? conditionColor.usado}`}>
-              {conditionLabel[condition] ?? condition}
+            <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium border ${condicaoBadgeColor[condicao]}`}>
+              {condicaoLabel[condicao]}
             </span>
           </div>
         </div>

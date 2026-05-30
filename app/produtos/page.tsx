@@ -45,7 +45,7 @@ async function ProductsGrid({ searchParams }: { searchParams: SearchParams }) {
   }
 
   if (searchParams.condicao) {
-    query = query.eq('condition', searchParams.condicao)
+    query = query.eq('condicao', searchParams.condicao)
   }
 
   if (searchParams.preco_min) {
@@ -87,11 +87,11 @@ async function ProductsGrid({ searchParams }: { searchParams: SearchParams }) {
             id={p.id}
             title={p.title}
             price={p.price}
-            unit={p.unit}
-            condition={p.condition}
+            unit={p.unit ?? 'unidade'}
+            condicao={p.condicao ?? 'bom'}
             location={p.location}
             category={cat?.nome ?? null}
-            views={p.views}
+            views={p.views ?? 0}
             cover={cover}
             companyName={companyName}
           />
