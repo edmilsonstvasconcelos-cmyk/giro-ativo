@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MapPin, Package, Eye } from 'lucide-react'
+import { MapPin, Package, Eye, ShieldCheck } from 'lucide-react'
 import { condicaoLabel, condicaoBadgeColor } from '@/lib/utils/produto'
 import type { CondicaoProduto } from '@/types/supabase'
 
@@ -14,10 +14,11 @@ interface ProductCardProps {
   views: number
   cover?: string | null
   companyName: string
+  temLaudo?: boolean
 }
 
 export default function ProductCard({
-  id, title, price, unit, condicao, location, category, views, cover, companyName
+  id, title, price, unit, condicao, location, category, views, cover, companyName, temLaudo,
 }: ProductCardProps) {
   return (
     <Link href={`/produtos/${id}`} className="group">
@@ -35,10 +36,15 @@ export default function ProductCard({
               <Package className="w-12 h-12 text-muted-foreground/30" />
             </div>
           )}
-          <div className="absolute top-2 left-2">
+          <div className="absolute top-2 left-2 flex gap-1">
             <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium border ${condicaoBadgeColor[condicao]}`}>
               {condicaoLabel[condicao]}
             </span>
+            {temLaudo && (
+              <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[10px] font-semibold border border-green-400/40 bg-green-500/90 text-white">
+                <ShieldCheck className="w-2.5 h-2.5" /> Laudo
+              </span>
+            )}
           </div>
         </div>
 
