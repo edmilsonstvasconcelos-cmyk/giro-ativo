@@ -38,8 +38,8 @@ export default async function VendedorProdutosPage({
     .is('deleted_at', null)
     .order('created_at', { ascending: false })
 
-  if (params.status) query = query.eq('status', params.status)
-  if (params.condicao) query = query.eq('condicao', params.condicao)
+  if (params.status) query = query.eq('status', params.status as 'active' | 'paused' | 'sold')
+  if (params.condicao) query = query.eq('condicao', params.condicao as import('@/types/supabase').CondicaoProduto)
 
   const { data: products } = await query
 

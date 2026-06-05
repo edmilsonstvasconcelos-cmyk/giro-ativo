@@ -13,15 +13,16 @@ import { cn } from '@/lib/utils'
 
 export default function Header() {
   const pathname = usePathname()
-  const supabase = createClient()
   const [user, setUser] = useState<{ email?: string } | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
+    const supabase = createClient()
     supabase.auth.getUser().then(({ data }) => setUser(data.user))
   }, [])
 
   async function handleSignOut() {
+    const supabase = createClient()
     await supabase.auth.signOut()
     window.location.href = '/login'
   }

@@ -33,7 +33,7 @@ export default async function PropostasPage({ searchParams }: { searchParams: Pr
     .is('deleted_at', null)
     .order('created_at', { ascending: false })
 
-  if (params.status) query = query.eq('status', params.status)
+  if (params.status) query = query.eq('status', params.status as import('@/types/supabase').PropostaStatus)
 
   const { data: propostas } = await query
 

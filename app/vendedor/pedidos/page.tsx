@@ -38,7 +38,7 @@ export default async function PedidosPage({ searchParams }: { searchParams: Prom
     .is('deleted_at', null)
     .order('created_at', { ascending: false })
 
-  if (params.status) query = query.eq('status', params.status)
+  if (params.status) query = query.eq('status', params.status as import('@/types/supabase').PedidoStatus)
 
   const { data: pedidos } = await query
 

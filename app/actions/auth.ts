@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { senhaSchema, validarCPF, validarCNPJ } from '@/lib/validations/auth'
+import type { ConsentPurpose } from '@/types/supabase'
 
 // =====================
 // Helpers internos
@@ -21,7 +22,7 @@ async function registrarConsentimentos(
   aceites: { marketing: boolean; analytics: boolean },
   ip: string | null
 ) {
-  const purposes: { purpose: string; granted: boolean }[] = [
+  const purposes: { purpose: ConsentPurpose; granted: boolean }[] = [
     { purpose: 'marketing', granted: aceites.marketing },
     { purpose: 'analytics', granted: aceites.analytics },
     { purpose: 'ia_training', granted: false },  // opt-in explícito futuro

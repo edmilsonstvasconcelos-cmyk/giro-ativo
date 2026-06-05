@@ -119,7 +119,7 @@ export const cadastroVendedorSchema = baseSchema.extend({
   cidade: z.string().optional(),
   estado: z.string().optional(),
   plano: z.enum(['basico', 'pro', 'enterprise']),
-  aceite_termos: z.literal(true, { errorMap: () => ({ message: 'Aceite os termos para continuar' }) }),
+  aceite_termos: z.literal(true, { message: 'Aceite os termos para continuar' }),
   consentimento_marketing: z.boolean().default(false),
   consentimento_analytics: z.boolean().default(false),
 })

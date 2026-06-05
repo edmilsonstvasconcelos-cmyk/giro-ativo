@@ -25,7 +25,7 @@ export default async function MeusProdutosPage() {
   const { data: products } = await supabase
     .from('products')
     .select(`
-      id, title, price, unit, condition, status, views, created_at,
+      id, title, price, unit, condicao, status, views, created_at,
       product_images ( url, is_cover )
     `)
     .eq('company_id', company.id)

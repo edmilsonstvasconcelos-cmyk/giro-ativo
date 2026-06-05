@@ -31,18 +31,16 @@ function requiresAuth(pathname: string) {
 }
 
 function isAuthOnlyPath(pathname: string) {
-  // /login e /cadastro (raiz) só para não-autenticados
   if (pathname === '/login') return true
   if (pathname === '/cadastro') return true
   return false
 }
 
 function isRegistrationSubpath(pathname: string) {
-  // /cadastro/comprador e /cadastro/vendedor são acessíveis durante o fluxo de registro
   return pathname.startsWith('/cadastro/')
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -88,13 +86,10 @@ export async function middleware(request: NextRequest) {
 
   // ── Autenticado ────────────────────────────────────────────────────────────
 
-  // Sub-rotas de cadastro (/cadastro/comprador, /cadastro/vendedor) são sempre
-  // acessíveis para completar o fluxo mesmo já logado
   if (isRegistrationSubpath(pathname)) {
     return supabaseResponse
   }
 
-  // Busca profile UMA vez por request (apenas quando necessário)
   const needsProfile =
     isAuthOnlyPath(pathname) ||
     requiresAuth(pathname) ||
@@ -108,7 +103,6 @@ export async function middleware(request: NextRequest) {
     .eq('user_id', user.id)
     .single()
 
-  // Usuário sem profile → ainda não completou cadastro
   if (!profile) {
     if (pathname === '/cadastro') return supabaseResponse
     return redirectTo('/cadastro')
@@ -117,19 +111,16 @@ export async function middleware(request: NextRequest) {
   const role = profile.role as string
   const roleHome = ROLE_HOME[role] ?? '/comprador'
 
-  // Páginas de auth-only (login, /cadastro raiz) → redireciona para home do role
   if (isAuthOnlyPath(pathname)) {
     return redirectTo(roleHome)
   }
 
-  // Proteção cruzada de roles
   for (const { prefix, allowed } of ROLE_RESTRICTED) {
     if (pathname.startsWith(prefix) && !allowed.includes(role)) {
       return redirectTo(roleHome)
     }
   }
 
-  // Vendedores sem company → onboarding (após o cadastro podem não ter company ainda)
   if (
     role === 'vendedor' &&
     requiresAuth(pathname) &&

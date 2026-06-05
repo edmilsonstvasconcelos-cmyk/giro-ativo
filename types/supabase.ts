@@ -574,7 +574,9 @@ export type Database = {
           updated_at?: string
           deleted_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          { foreignKeyName: 'laudos_produto_id_fkey'; columns: ['produto_id']; referencedRelation: 'products'; referencedColumns: ['id'] }
+        ]
       }
 
       // ---- laudo_fotos ----
@@ -761,7 +763,10 @@ export type Database = {
           updated_at?: string
           deleted_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          { foreignKeyName: 'assinaturas_empresa_id_fkey'; columns: ['empresa_id']; referencedRelation: 'companies'; referencedColumns: ['id'] },
+          { foreignKeyName: 'assinaturas_plano_id_fkey'; columns: ['plano_id']; referencedRelation: 'planos'; referencedColumns: ['id'] }
+        ]
       }
 
       // ---- consent_records ----
@@ -910,6 +915,29 @@ export type Database = {
         }
         Relationships: []
       }
+
+      // ---- favoritos ----
+      favoritos: {
+        Row: {
+          id: string
+          user_id: string
+          produto_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          produto_id: string
+          created_at?: string
+        }
+        Update: {
+          produto_id?: string
+        }
+        Relationships: [
+          { foreignKeyName: 'favoritos_user_id_fkey'; columns: ['user_id']; referencedRelation: 'users'; referencedColumns: ['id'] },
+          { foreignKeyName: 'favoritos_produto_id_fkey'; columns: ['produto_id']; referencedRelation: 'products'; referencedColumns: ['id'] }
+        ]
+      }
     }
 
     Views: {
@@ -921,6 +949,7 @@ export type Database = {
           terms_version: string
           updated_at: string
         }
+        Relationships: []
       }
     }
 

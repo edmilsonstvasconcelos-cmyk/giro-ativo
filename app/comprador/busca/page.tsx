@@ -56,7 +56,7 @@ async function BuscaGrid({ sp }: { sp: SearchParams }) {
 
   if (sp.q)          query = query.or(`title.ilike.%${sp.q}%,description.ilike.%${sp.q}%,norma_tecnica.ilike.%${sp.q}%`)
   if (sp.categoria)  query = query.eq('category_id', Number(sp.categoria))
-  if (sp.condicao)   query = query.eq('condicao', sp.condicao)
+  if (sp.condicao)   query = query.eq('condicao', sp.condicao as import('@/types/supabase').CondicaoProduto)
   if (sp.preco_min)  query = query.gte('price', Number(sp.preco_min))
   if (sp.preco_max)  query = query.lte('price', Number(sp.preco_max))
   if (sp.estado)     query = query.ilike('location', `%, ${sp.estado}%`)

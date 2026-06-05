@@ -41,7 +41,7 @@ export default async function CompradorPropostasPage({ searchParams }: { searchP
     .order('created_at', { ascending: false })
 
   if (params.filtro && params.filtro !== 'todas') {
-    query = query.eq('status', params.filtro)
+    query = query.eq('status', params.filtro as import('@/types/supabase').PropostaStatus)
   }
 
   const { data: propostas } = await query

@@ -200,7 +200,7 @@ export default function EditarProdutoPage() {
           price:             form.price ? Number(form.price) : null,
           unit:              form.unit,
           quantity:          Number(form.quantity),
-          condicao:          form.condicao,
+          condicao:          form.condicao as import('@/types/supabase').CondicaoProduto,
           location:          form.location || null,
           norma_tecnica:     form.norma_tecnica || null,
           ncm:               form.ncm || null,

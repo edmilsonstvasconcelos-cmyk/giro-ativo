@@ -27,7 +27,7 @@ async function ProductsGrid({ searchParams }: { searchParams: SearchParams }) {
   let query = supabase
     .from('products')
     .select(`
-      id, title, price, unit, condition, location, views, status, created_at,
+      id, title, price, unit, condicao, location, views, status, created_at,
       categories ( nome ),
       product_images ( url, is_cover ),
       companies ( razao_social, nome_fantasia )
@@ -45,7 +45,7 @@ async function ProductsGrid({ searchParams }: { searchParams: SearchParams }) {
   }
 
   if (searchParams.condicao) {
-    query = query.eq('condicao', searchParams.condicao)
+    query = query.eq('condicao', searchParams.condicao as import('@/types/supabase').CondicaoProduto)
   }
 
   if (searchParams.preco_min) {

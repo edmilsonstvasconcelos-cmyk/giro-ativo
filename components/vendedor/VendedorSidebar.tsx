@@ -49,7 +49,7 @@ export default function VendedorSidebar({ badges, isOpen, onClose }: Props) {
 
   const badgeValue = (key: string | null): number => {
     if (!key) return 0
-    return (badges as Record<string, number>)[key] ?? 0
+    return (badges as unknown as Record<string, number>)[key] ?? 0
   }
 
   return (
