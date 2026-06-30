@@ -334,6 +334,73 @@ INSERT INTO products (id, company_id, title, description, category_id, price, un
    FALSE, FALSE, 'active', 'aprovado');
 
 -- =====================
+-- Imagens dos produtos (mockadas para testes)
+-- Cada produto recebe uma capa + galeria com imagens relacionadas ao item.
+-- Fonte: loremflickr (imagens por palavra-chave, `lock` garante imagem estável).
+-- =====================
+INSERT INTO product_images (product_id, url, is_cover, ordem) VALUES
+  -- Tubo de Aço Inox AISI 316L
+  ('b0000001-0000-0000-0000-000000000001', 'https://loremflickr.com/800/600/stainless,steel,pipe?lock=101', TRUE,  0),
+  ('b0000001-0000-0000-0000-000000000001', 'https://loremflickr.com/800/600/steel,pipe,warehouse?lock=102', FALSE, 1),
+  ('b0000001-0000-0000-0000-000000000001', 'https://loremflickr.com/800/600/metal,tube?lock=103',           FALSE, 2),
+
+  -- Flanges ANSI B16.5
+  ('b0000002-0000-0000-0000-000000000002', 'https://loremflickr.com/800/600/steel,flange,pipe?lock=201', TRUE,  0),
+  ('b0000002-0000-0000-0000-000000000002', 'https://loremflickr.com/800/600/pipe,fitting,metal?lock=202', FALSE, 1),
+
+  -- Curvas 90° Aço Inox 304
+  ('b0000003-0000-0000-0000-000000000003', 'https://loremflickr.com/800/600/steel,pipe,elbow?lock=301', TRUE,  0),
+  ('b0000003-0000-0000-0000-000000000003', 'https://loremflickr.com/800/600/pipe,fitting?lock=302',     FALSE, 1),
+
+  -- Cotovelos Soldáveis 45"
+  ('b0000004-0000-0000-0000-000000000004', 'https://loremflickr.com/800/600/stainless,pipe,fitting?lock=401', TRUE,  0),
+  ('b0000004-0000-0000-0000-000000000004', 'https://loremflickr.com/800/600/metal,pipe?lock=402',            FALSE, 1),
+
+  -- Manômetros Bourdon
+  ('b0000005-0000-0000-0000-000000000005', 'https://loremflickr.com/800/600/pressure,gauge,manometer?lock=501', TRUE,  0),
+  ('b0000005-0000-0000-0000-000000000005', 'https://loremflickr.com/800/600/industrial,gauge?lock=502',         FALSE, 1),
+
+  -- Motor Elétrico WEG W22
+  ('b0000006-0000-0000-0000-000000000006', 'https://loremflickr.com/800/600/electric,motor?lock=601',        TRUE,  0),
+  ('b0000006-0000-0000-0000-000000000006', 'https://loremflickr.com/800/600/industrial,motor,machine?lock=602', FALSE, 1),
+
+  -- Disjuntores Siemens 3RV
+  ('b0000007-0000-0000-0000-000000000007', 'https://loremflickr.com/800/600/circuit,breaker,electrical?lock=701', TRUE,  0),
+  ('b0000007-0000-0000-0000-000000000007', 'https://loremflickr.com/800/600/electrical,panel?lock=702',          FALSE, 1),
+
+  -- CLP Siemens S7-300
+  ('b0000008-0000-0000-0000-000000000008', 'https://loremflickr.com/800/600/plc,automation,controller?lock=801', TRUE,  0),
+  ('b0000008-0000-0000-0000-000000000008', 'https://loremflickr.com/800/600/industrial,automation?lock=802',     FALSE, 1),
+
+  -- Cabos Elétricos 95mm²
+  ('b0000009-0000-0000-0000-000000000009', 'https://loremflickr.com/800/600/electrical,cable,copper?lock=901', TRUE,  0),
+  ('b0000009-0000-0000-0000-000000000009', 'https://loremflickr.com/800/600/cable,wire?lock=902',              FALSE, 1),
+
+  -- Inversor de Frequência ABB ACS550
+  ('b0000010-0000-0000-0000-000000000010', 'https://loremflickr.com/800/600/inverter,electrical,drive?lock=1001', TRUE,  0),
+  ('b0000010-0000-0000-0000-000000000010', 'https://loremflickr.com/800/600/electrical,equipment?lock=1002',     FALSE, 1),
+
+  -- Válvula Globo Inox 316
+  ('b0000011-0000-0000-0000-000000000011', 'https://loremflickr.com/800/600/industrial,valve?lock=1101', TRUE,  0),
+  ('b0000011-0000-0000-0000-000000000011', 'https://loremflickr.com/800/600/valve,pipe?lock=1102',       FALSE, 1),
+
+  -- Válvula de Controle Fisher
+  ('b0000012-0000-0000-0000-000000000012', 'https://loremflickr.com/800/600/control,valve,industrial?lock=1201', TRUE,  0),
+  ('b0000012-0000-0000-0000-000000000012', 'https://loremflickr.com/800/600/valve,actuator?lock=1202',          FALSE, 1),
+
+  -- Transmissor de Pressão Rosemount 3051
+  ('b0000013-0000-0000-0000-000000000013', 'https://loremflickr.com/800/600/pressure,transmitter,instrument?lock=1301', TRUE,  0),
+  ('b0000013-0000-0000-0000-000000000013', 'https://loremflickr.com/800/600/industrial,instrument?lock=1302',          FALSE, 1),
+
+  -- Bomba Centrífuga KSB Megachem
+  ('b0000014-0000-0000-0000-000000000014', 'https://loremflickr.com/800/600/industrial,pump?lock=1401', TRUE,  0),
+  ('b0000014-0000-0000-0000-000000000014', 'https://loremflickr.com/800/600/centrifugal,pump?lock=1402', FALSE, 1),
+
+  -- EPIs para trabalho em altura
+  ('b0000015-0000-0000-0000-000000000015', 'https://loremflickr.com/800/600/safety,harness,helmet?lock=1501', TRUE,  0),
+  ('b0000015-0000-0000-0000-000000000015', 'https://loremflickr.com/800/600/safety,equipment?lock=1502',      FALSE, 1);
+
+-- =====================
 -- Conversas e mensagens de exemplo
 -- =====================
 

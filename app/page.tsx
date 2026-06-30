@@ -37,16 +37,16 @@ export default function Home() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#4FD1C5] blur-[150px] opacity-[0.03] rounded-full pointer-events-none"></div>
 
           <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6">
-            <div className="flex flex-col lg:flex-row gap-12 items-center">
-              
+            <div className="flex flex-col md:flex-row gap-12 items-center">
+
               {/* Left Column: Text & CTA */}
-              <div className="text-left w-full lg:w-[45%] relative z-20">
+              <div className="text-left w-full md:w-[45%] relative z-20">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#1b5c53]/80 border border-[#2b7a6d] text-sm font-medium mb-8 text-[#a9e5db] shadow-lg backdrop-blur-sm">
                   <div className="bg-[#4FD1C5] p-1 rounded-sm"><RefreshCw className="w-3.5 h-3.5 text-[#124b43] stroke-[3]" /></div>
                   Economia Circular Industrial
                 </div>
 
-                <h1 className="text-5xl lg:text-[4.5rem] font-bold text-white leading-[1.1] tracking-tight mb-6">
+                <h1 className="text-5xl md:text-4xl lg:text-[4.5rem] font-bold text-white leading-[1.1] tracking-tight mb-6">
                   Seu estoque parado.<br />
                   <span className="text-[#4FD1C5]">Negócio em movimento.</span>
                 </h1>
@@ -77,7 +77,7 @@ export default function Home() {
               </div>
 
               {/* Right Column: 3D Floating Dashboards */}
-              <div className="relative hidden lg:block w-full lg:w-[55%] h-[600px]">
+              <div className="relative hidden md:block w-full md:w-[55%] h-[600px]">
                 
                 {/* Back Window: Inventory Management */}
                 <div className="absolute top-0 right-14 w-[80%] h-[320px] bg-[#1d3d37]/90 backdrop-blur-3xl border border-[#3e766a] rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.3)] overflow-hidden animate-float-slow">
